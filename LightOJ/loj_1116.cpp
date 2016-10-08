@@ -1,3 +1,4 @@
+// Unsolved
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long int lli;
@@ -10,34 +11,23 @@ int main(int argc, char const *argv[]) {
 
     cin >> t;
 
-    for(int j=1;j<=t;j++){
+    for(int f=0;f<t;f++){
+
         lli n,a,b;
         cin >> n;
 
-        bool flag = false;
-
-        if(n%2==0){
-            if((n/2)%2==1){
-                flag = true;
-                a = n/2;
-                b = 2;
-            }
+        if(n%2 == 1){
+            cout << "Impossible" << endl;
+            continue;
         }
 
-        if(!flag){
-            for(lli i=3;i<n;i+=2){
-                if(n%i==0 && (n/i)%2==0){
-                    flag = true;
-                    a = i;
-                    b = n/i;
-                }
+        for(lli i=2;i<=ceil(sqrt(n))+1; i+=2){
+            if(n%2 == 0){
+                a = i;
+                b = n/i;
             }
         }
-
-        if(flag)
-            printf("Case %d: %lli %lli\n", j,a,b);
-        else
-            printf("Case %d: Impossible\n",j );
+        cout << a << " " << b << endl;
     }
 
     return 0;

@@ -1,0 +1,13 @@
+/home/atiab/Documents/Codes/Codeforces/cf_723B.cpp: In function ‘int main()’:
+/home/atiab/Documents/Codes/Codeforces/cf_723B.cpp:5:24: error: ‘n’ was not declared in this scope
+     while(scanf("%d", &n) == 1){
+                        ^
+/home/atiab/Documents/Codes/Codeforces/cf_723B.cpp:13:37: error: ‘Max’ was not declared in this scope
+                 ans1 = Max(ans1, cnt);
+                                     ^
+/home/atiab/Documents/Codes/Codeforces/cf_723B.cpp:23:42: error: ‘Max’ was not declared in this scope
+                 else ans1 = Max(ans1, cnt);
+                                          ^
+/home/atiab/Documents/Codes/Codeforces/cf_723B.cpp:28:29: error: ‘Max’ was not declared in this scope
+         ans1 = Max(ans1, cnt);
+                             ^
