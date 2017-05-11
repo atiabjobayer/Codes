@@ -1,0 +1,1 @@
+#include <bits/stdc++.h>using namespace std;int main(){	string a,b;	cin >> a;	if(a.size() > 3){		for(int i=0;i<a.size()-2;i++){			if(a[i] == 'W' && a[i+1] == 'U' && a[i+2] == 'B'){				a[i] = ' ';				a[i+1] = ' ';				a[i+2] = ' ';			}		}		stringstream ss(a);		while(ss >> b){			cout << b << " ";		}	}	else{		cout << a;	}	cout << endl;	return  0;}

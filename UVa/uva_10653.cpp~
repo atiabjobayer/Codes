@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+#define MAX 1010
+#define pb(x) push_back(x)
+#define pii pair <int,int>
+#define read() freopen("in.txt","r",stdin)
+#define write() freopen("out.txt","w",stdout)
+#define valid(x,y) ((x >= 0 && x < row) && (y >= 0 && y < col))
+
+using namespace std;
+typedef long long int lli;
+
+int graph[MAX][MAX];
+
+vector <pii> adj[MAX][MAX];
+
+void bfs(pii S, pii E)
+{
+    queue <pii> q; vector <pii> path;
+
+    int vis[MAX][MAX]; pii par[MAX][MAX];
+
+    memset(vis,0,sizeof(vis)); memset(par,0,sizeof(par));
+
+    q.push(S); vis[S.first][S.second] = 1;
+
+    while(! q.empty()){
+        pii u = q.front(); q.pop();
+
+        for(int i = 0; i < adj[u.first][u.second].size();i++){
+            pii v = adj[u.first][u.second][i];
+
+            if(vis[v.first][v.second])continue;
+
+            q.push(v); vis[v.first][v.second] = 1;
+            par[v.first][v.second] = u;
+        }
+    }
+
+    for(pii u = E;u != S;u = par[u.first][u.second])path.pb(u);
+
+    return path.size();
+}
+
+int main()
+{
+    read();
+
+    int row,col;
+
+    while(1){
+        cin >> row >> col;
+        if(row == 0 && col == 0)break;
+
+        memset(graph,0,sizeof(graph));
+        for(int i=0;i<MAX;i++)for(int j=0;j<MAX;j++)adj[i][j].clear();
+
+        int edge;
+
+        cin >> edge;
+
+        for(int t=0,i,num=0;t<edge;t++){
+            cin >> i;
+            string mines,mine;
+            getline(cin,mines);
+            istringstream ist(mines);
+
+            while(ist >> mine){
+                stringstream convert(mine);
+                convert >> num;
+
+                graph[i][num] = 1;
+            }
+        }
+
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                if(valid(i-1,j) && graph[i-1][j] != 1)adj[i][j].pb(pii (i-1,j));
+                if(valid(i+1,j) && graph[i+1][j] != 1)adj[i][j].pb(pii (i+1,j));
+                if(valid(i,j-1) && graph[i][j-1] != 1)adj[i][j].pb(pii (i,j-1));
+                if(valid(i,j+1) && graph[i][j+1] != 1)adj[i][j].pb(pii (i,j+1));
+
+                if(graph[i][j] == 0)cout << ".";
+                else if(graph[i][j] == 1)cout << "1";
+            }
+            cout << endl;
+        }
+
+        int x1,y1,x2,y2;
+
+        cin >> x1 >> y1 >> x2 >> y2;
+
+        pii a(x1,y1),b(x2,y2);
+
+        bfs(a,b);
+    }
+
+    return 0;
+}

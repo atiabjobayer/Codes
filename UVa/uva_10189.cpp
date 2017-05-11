@@ -1,66 +1,66 @@
 #include <bits/stdc++.h>
-#define read(x) freopen(x,"r",stdin)
-#define write(x) freopen(x,"w",stdout)
-
+#define valid(x,y) ((x >= 0 && x <= m) && (y >= 0 && y <= n))
+#define read() freopen("in.txt","r",stdin)
+#define write() freopen("out.txt","w",stdout)
 using namespace std;
+
+char ara[200][200];
 
 int main()
 {
-    //read("in.txt");
-    //write("out.txt");
-    for(int t=1;;t++){
-        int a,b;
-        cin >> a >> b;
-        if(a==0 && b==0)
+    int m,n,tc = 0;
+
+    while(cin >> m >> n){
+
+        if(m == 0 && n == 0){
             break;
-
-        char graph[a][b];
-        for(int i=0;i<a;i++){
-            for(int j=0;j<b;j++){
-                cin >> graph[i][j];
-                if(graph[i][j] == '.')
-                    graph[i][j] = 0;
-            }
         }
 
-        //graph[0-1][0]++
-        for(int i=0;i<a;i++){
-            for(int j=0;j<b;j++){
-                if(graph[i][j]=='*'){
-                    if(graph[i-1][j] != '*')
-                        graph[i-1][j]++;
-                    if(graph[i-1][j-1] != '*')
-                        graph[i-1][j-1]++;
-                    if(graph[i-1][j+1] != '*')
-                        graph[i-1][j+1]++;
-                    if(graph[i+1][j] != '*')
-                        graph[i+1][j]++;
-                    if(graph[i+1][j-1] != '*')
-                        graph[i+1][j-1]++;
-                    if(graph[i+1][j+1] != '*')
-                        graph[i+1][j+1]++;
-                    if(graph[i][j-1] != '*')
-                        graph[i][j-1]++;
-                    if(graph[i][j+1] != '*')
-                        graph[i][j+1]++;
-                }
-            }
-        }
-
-        cout << "Field #" << t << ":\n";
-        for(int i=0;i<a;i++){
-            for(int j=0;j<b;j++){
-                if(graph[i][j]=='*'){
-                    cout << graph[i][j];
-                }
-                else{
-                    printf("%d", graph[i][j]);
-                }
-            }
+        if(tc){
             cout << endl;
         }
-        cout << endl;
 
+        memset(ara,-1,sizeof(ara));
+
+        tc++;
+
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                cin >> ara[i][j];
+                if(ara[i][j] == '.'){
+                    ara[i][j] = 0;
+                }
+            }
+        }
+
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(ara[i][j] == '*'){
+                    if(valid(i,j+1) && ara[i][j+1] != '*')ara[i][j+1]++;
+                    if(valid(i,j-1) && ara[i][j-1] != '*')ara[i][j-1]++;
+                    if(valid(i-1,j) && ara[i-1][j] != '*')ara[i-1][j]++;
+                    if(valid(i+1,j) && ara[i+1][j] != '*')ara[i+1][j]++;
+                    if(valid(i-1,j-1) && ara[i-1][j-1] != '*')ara[i-1][j-1]++;
+                    if(valid(i-1,j+1) && ara[i-1][j+1] != '*')ara[i-1][j+1]++;
+                    if(valid(i+1,j-1) && ara[i+1][j-1] != '*')ara[i+1][j-1]++;
+                    if(valid(i+1,j+1) && ara[i+1][j+1] != '*')ara[i+1][j+1]++;
+                }
+            }
+        }
+
+        printf("Field #%d:\n",tc);
+
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(ara[i][j] == '*'){
+                    printf("*");
+                }
+                else{
+                    printf("%d",ara[i][j]);
+                }
+            }
+            printf("\n");
+        }
     }
 
     return 0;

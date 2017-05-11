@@ -1,11 +1,1 @@
-wrong
-right
-right
-right
-right
-right
-right
-wrong
-right
-right
-wrong
+0
