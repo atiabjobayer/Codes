@@ -2,7 +2,7 @@
 
 #include <bits/stdc++.h>
 #define MAX 100000
-#define pair <int, int> pii
+#define pair < int, int > pii
 #define pb(x) emplace_back(x)
 #define read() freopen("in.txt", "r", stdin);
 #define write() freopen("out.txt", "w", stdout);
@@ -12,7 +12,7 @@ using namespace std;
 typedef long long int lli;
 
 int ara[MAX] = {4, -9, 3, 7, 1, 0, 2, 5}, n = 8;
-int seg[MAX];
+int seg[4 * MAX];
 
 void build_tree(int index, int st, int ed) {
     if (st == ed) {
