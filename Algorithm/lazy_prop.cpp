@@ -33,6 +33,17 @@ void build_tree(int idx = 1, int st = 0, int ed = n - 1) {
     tree[idx].sum = tree[idx * 2].sum + tree[idx * 2 + 1].sum;
 }
 
+void print_tree(int idx = 1, int st = 0, int ed = n - 1) {
+    printf("(%d, %d, %d-%d)\n", tree[idx].sum, tree[idx].prop, st, ed);
+
+    if (st != ed) {
+        int mid = (st + ed) / 2;
+
+        print_tree(2 * idx, st, mid);
+        print_tree(2 * idx + 1, mid + 1, ed);
+    }
+}
+
 void update(int s, int e, int v, int idx = 1, int st = 0, int ed = n - 1) {
     if (st > e || ed < s)
         return;
@@ -76,6 +87,8 @@ int main() {
     build_tree();
 
     update(0, 9, 10);
+
+    print_tree();
 
     cout << query(0, 4) << endl;
 

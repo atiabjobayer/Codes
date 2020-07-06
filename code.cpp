@@ -1,4 +1,4 @@
-// Range Minimum Query
+// Range Sum Query
 
 #include <bits/stdc++.h>
 #define MAX 100000
@@ -6,23 +6,17 @@
 #define pb(x) emplace_back(x)
 #define read() freopen("in.txt", "r", stdin);
 #define write() freopen("out.txt", "w", stdout);
-#define print(x) cout << (#x) << " = " << x << edl
+#define echo(x) cout << (#x) << " = " << x << endl
 
 using namespace std;
 typedef long long int lli;
 
 int ara[MAX] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, n = 10;
 
-struct node {
-    int sum, lazyfl, lazyval;
+struct {
+    int sum;
+    int prop;
 
-    node(){};
-
-    node(int s, int lf, int lv) {
-        sum     = s;
-        lazyfl  = lf;
-        lazyval = lv;
-    }
 } tree[4 * MAX];
 
 void build_tree(int idx = 1, int st = 0, int ed = n - 1) {
@@ -39,67 +33,64 @@ void build_tree(int idx = 1, int st = 0, int ed = n - 1) {
     tree[idx].sum = tree[idx * 2].sum + tree[idx * 2 + 1].sum;
 }
 
-void node_update(int idx, int st, int ed, int v) {
-    tree[idx].sum += (ed - st + 1) * v;
-    tree[idx].lazyfl = 1;
-    tree[idx].lazyval += v;
+void print_tree(int idx = 1, int st = 0, int ed = n - 1) {
+    printf("(%d, %d, %d-%d)\n", tree[idx].sum, tree[idx].prop, st, ed);
+
+    if (st != ed) {
+        int mid = (st + ed) / 2;
+
+        print_tree(2 * idx, st, mid);
+        print_tree(2 * idx + 1, mid + 1, ed);
+    }
 }
 
-void lazy_update(int idx, int st, int ed) {
-    int mid = (st + ed) / 2;
-
-    node_update(2 * idx, st, ed, tree[idx].lazyval);
-    node_update(2 * idx + 1, mid + 1, ed, tree[idx].lazyval);
-
-    tree[idx].lazyfl = tree[idx].lazyval = 0;
-}
-
-node merge_node(const node &a, const node &b) {
-    node ret;
-
-    ret.sum    = a.sum + b.sum;
-    ret.lazyfl = ret.lazyval = 0;
-
-    return ret;
-}
-
-void tree_update(int idx, int st, int ed, int s, int e, int v) {
-    if (s > e || ed < s)
+void update(int s, int e, int v, int idx = 1, int st = 0, int ed = n - 1) {
+    if (st > e || ed < s)
         return;
 
     if (st >= s && ed <= e) {
-        node_update(idx, st, ed, v);
+        tree[idx].sum += (ed - st + 1) * v;
+        tree[idx].prop += v;
+
         return;
     }
 
-    if (tree[idx].lazyfl) {
-        lazy_update(idx, st, ed);
+    int mid = (st + ed) / 2;
+
+    update(s, e, v, 2 * idx, st, mid);
+    update(s, e, v, 2 * idx + 1, mid + 1, ed);
+
+    tree[idx].sum = tree[2 * idx].sum + tree[2 * idx + 1].sum +
+                    tree[idx].prop * (ed - st + 1);
+}
+
+int query(int s, int e, int idx = 1, int st = 0, int ed = n - 1,
+          int carry = 0) {
+    if (st > e || ed < s)
+        return 0;
+
+    if (st >= s && ed <= e) {
+        return tree[idx].sum + carry * (ed - st + 1);
     }
 
     int mid = (st + ed) / 2;
 
-    tree_update(idx, st, mid, s, e, v);
-    tree_update(idx, mid + 1, ed, s, e, v);
+    int left  = query(s, e, 2 * idx, st, mid, carry + tree[idx].prop);
+    int right = query(s, e, 2 * idx + 1, mid + 1, ed, carry + tree[idx].prop);
 
-    tree[idx] = merge_node(tree[2 * idx], tree[2 * idx + 1]);
+    return left + right;
 }
 
-node query(int idx, int st, int ed, int s, int e) {
-    if (st > e || ed < s)
-        return node(0, 0, 0);
+int main() {
+    // read();
 
-    if (st >= s && ed <= e)
-        return tree[idx];
+    build_tree();
 
-    if (tree[idx].lazyfl)
-        lazy_update(idx, st, ed);
+    update(0, 9, 10);
 
-    int mid = (st + ed) / 2;
+    print_tree();
 
-    node a = query(2 * idx, st, mid, s, e);
-    node b = query(2 * idx + 1, mid + 1, ed, s, e);
+    cout << query(0, 4) << endl;
 
-    return merge_node(a, b);
+    return 0;
 }
-
-int main() { return 0; }
