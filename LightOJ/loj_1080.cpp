@@ -10,6 +10,7 @@ using namespace std;
 typedef long long int lli;
 
 lli ara[MAX], n;
+char str[MAX];
 
 struct {
     lli sum;
@@ -97,18 +98,19 @@ int main() {
     scanf("%lli", &tc);
 
     for (lli t = 1; t <= tc; t++) {
-        string str;
-        cin >> str;
+        str[0] = '\0';
+
+        scanf("%s", str);
 
         memset(ara, 0, sizeof(ara));
         memset(tree, 0, sizeof(tree));
 
-        printf("Case %d:\n", t);
+        printf("Case %lli:\n", t);
 
-        n = str.size();
+        n = strlen(str);
 
         for (lli i = 0; i < n; i++) {
-            ara[i] = str.at(i) - '0';
+            ara[i] = str[i] - '0';
         }
 
         build_tree();

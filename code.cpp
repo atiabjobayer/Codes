@@ -82,15 +82,13 @@ int query(int s, int e, int idx = 1, int st = 0, int ed = n - 1,
 }
 
 int main() {
-    // read();
+    read();
 
     build_tree();
 
     update(0, 9, 10);
 
     print_tree();
-
-    cout << query(0, 4) << endl;
 
     return 0;
 }
