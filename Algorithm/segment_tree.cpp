@@ -1,71 +1,65 @@
-// Range Minimum Query
-
+// Segment Tree => Range Max Query
 #include <bits/stdc++.h>
-#define MAX 100000
-#define pair < int, int > pii
-#define pb(x) emplace_back(x)
-#define read() freopen("in.txt", "r", stdin);
-#define write() freopen("out.txt", "w", stdout);
-#define print(x) cout << (#x) << " = " << x << edl
-
+#define MAX 10
 using namespace std;
-typedef long long int lli;
 
-int ara[MAX] = {4, -9, 3, 7, 1, 0, 2, 5}, n = 8;
+int ara[MAX] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 int seg[4 * MAX];
 
-void build_tree(int index, int st, int ed) {
-    if (st == ed) {
-        seg[index] = ara[st];
+void build_tree(int index, int low, int high) {
+    if (high == low) {
+        seg[index] = ara[high];
         return;
     }
 
-    int mid = (st + ed) / 2;
+    int mid = (high + low) / 2;
 
-    build_tree(index * 2, st, mid);
-    build_tree(index * 2 + 1, mid + 1, ed);
+    build_tree(2 * index + 1, low, mid);      // left child
+    build_tree(2 * index + 2, mid + 1, high); // right child
 
-    seg[index] = min(seg[index * 2], seg[index * 2 + 1]);
+    seg[index] = max(seg[2 * index + 1], seg[2 * index + 2]);
 }
 
-int query(int index, int st, int ed, int i, int j) {
-    if (st > j || ed < i)
-        return 100000000; // not in array
-    if (st >= i && ed <= j)
-        return seg[index]; // completely in segment
+int query(int index, int low, int high, int l, int r) {
+    if (low >= l && high <= r) // complete overlap
+        return seg[index];
 
-    int mid = (st + ed) / 2;
+    if (high < l || low > r) // no overlap
+        return INT_MIN;
 
-    int left  = query(2 * index, st, mid, i, j);
-    int right = query(2 * index + 1, mid + 1, ed, i, j);
+    int mid = (high + low) / 2;
 
-    return min(left, right);
+    int left  = query(2 * index + 1, low, mid, l, r);
+    int right = query(2 * index + 2, mid + 1, high, l, r);
+
+    return max(left, right);
 }
 
-void update(int index, int st, int ed, int i, int value) {
-    if (st > i || ed < i)
+void update(int index, int low, int high, int i, int value) {
+    if (low > i || high < i)
         return;
-    if (st == i && ed == i)
+    if (low == i && high == i) {
         seg[index] = value;
+        return;
+    }
 
-    int mid = (st + ed) / 2;
+    int mid = (low + high) / 2;
 
-    update(2 * index, st, mid, i, value);
-    update(2 * index + 1, st, mid, i, value);
+    update(2 * index + 1, low, mid, i, value);
+    update(2 * index + 2, mid + 1, high, i, value);
 
-    seg[index] = min(seg[index * 2], seg[index * 2 + 1]);
+    seg[index] = max(seg[index * 2 + 1], seg[index * 2 + 2]);
 }
 
 int main() {
-    // read();
-    // write();
+    int n = 9;
+    build_tree(0, 0, n - 1);
 
-    build_tree(1, 0, n - 1);
+    cout << query(0, 0, n - 1, 3, 6) << endl;
 
-    // for (int i = 0; i < 30; i++)
-    //     cout << seg[i] << " ";
+    update(0, 0, n - 1, 5, 24);
 
-    cout << query(1, 0, 7, 2, 4) << endl;
+    cout << query(0, 0, n - 1, 3, 6) << endl;
 
     return 0;
 }
