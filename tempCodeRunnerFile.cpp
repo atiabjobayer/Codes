@@ -66,7 +66,7 @@ void del(node *curr) {
 }
 
 int main() {
-    // read();
+    read();
     // write();
 
     int tc;

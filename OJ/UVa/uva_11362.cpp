@@ -1,3 +1,5 @@
+// Accepted
+
 #include <bits/stdc++.h>
 #define MAX 10010
 #define PI acos(-1)
